@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Solara PV Intake Agent – PoC</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--ink:#14213d;--mut:#5c6b80;--line:#dde3ea;--bg:#f5f7fa;--p1:#c0392b;--p2:#d68910;--p3:#2e7d32;--acc:#0b5cad}
+*{box-sizing:border-box}body{margin:0;font:14px/1.45 system-ui,Segoe UI,Arial;color:var(--ink);background:var(--bg)}
+header{display:flex;align-items:center;gap:16px;padding:10px 18px;background:var(--ink);color:#fff}
+header b{font-size:16px}header .tag{font-size:11px;background:#ffffff22;padding:2px 8px;border-radius:10px}
+.kpis{display:flex;gap:10px;margin-left:auto}.kpi{background:#ffffff14;padding:4px 10px;border-radius:6px;font-size:12px}
+.kpi b{font-size:15px;margin-right:4px}
+main{display:grid;grid-template-columns:380px 1fr;height:calc(100vh - 50px)}
+#queue{border-right:1px solid var(--line);overflow:auto;background:#fff}
+.filters{display:flex;gap:6px;padding:8px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff}
+.filters button{border:1px solid var(--line);background:#fff;border-radius:14px;padding:3px 10px;cursor:pointer;font-size:12px}
+.filters button.on{background:var(--ink);color:#fff}
+.row{padding:9px 12px;border-bottom:1px solid var(--line);cursor:pointer;display:grid;grid-template-columns:34px 1fr auto;gap:8px}
+.row:hover,.row.sel{background:#eef4fb}.pr{font-weight:700;color:#fff;border-radius:4px;text-align:center;font-size:12px;height:20px;line-height:20px}
+.P1{background:var(--p1)}.P2{background:var(--p2)}.P3{background:var(--p3)}
+.row small{color:var(--mut)}.due{font-size:12px;text-align:right}.late{color:var(--p1);font-weight:700}
+#detail{overflow:auto;padding:16px 22px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.card h3{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut)}
+.src{white-space:pre-wrap;background:#fbfbf3;border-left:3px solid #e2c044;padding:8px;font-size:13px}
+table{border-collapse:collapse;width:100%}td{padding:4px 6px;border-bottom:1px solid #eef1f4;vertical-align:top}td:first-child{color:var(--mut);width:42%}
+.chip{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;background:#eef1f4;margin:2px}
+.chip.w{background:#fdecea;color:#8e1b10}.ai{font-size:11px;color:var(--acc);font-weight:600}
+.btns button{margin:4px 6px 0 0;padding:7px 12px;border-radius:6px;border:1px solid var(--line);cursor:pointer;background:#fff}
+.btns .pri{background:var(--acc);color:#fff;border-color:var(--acc)}
+.clock{font-size:26px;font-weight:700}textarea{width:100%;min-height:90px;font:inherit;padding:8px}
+.banner{background:#fff4e5;border:1px solid #f5c26b;padding:6px 10px;border-radius:6px;font-size:12px;margin-bottom:12px}
+</style></head><body>
+<header><b>Solara PV · Intake Agent</b><span class="tag">PoC · synthetic data · not validated</span>
+<div class="kpis" id="kpis"></div></header>
+<main><section id="queue"><div class="filters" id="filters"></div><div id="rows"></div></section>
+<section id="detail"></section></main>
+<script>
+let cases=[],sel=null,filt="ALL";
+const esc=s=>String(s??"").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+let STATIC=false,LOCAL_AUDIT=[];
+async function load(){if(!cases.length){try{const r=await fetch('/api/cases');if(!r.ok)throw 0;cases=await r.json()}catch(e){STATIC=true;cases=await (await fetch('cases.json')).json();document.querySelector('header .tag').textContent='STATIC DEMO · 60 pre-computed synthetic cases · decisions are not saved'}}render();if(!sel)newForm()}
+function sortKey(c){return ({P1:0,P2:1,P3:2})[c.triage_priority]*1000+(c.clock.days_left??999)}
+function render(){
+ const p1=cases.filter(c=>c.triage_priority=="P1"),open=cases.filter(c=>c.status.startsWith("Awaiting"));
+ const risk=cases.filter(c=>c.clock.days_left!=null&&c.clock.days_left<=3);
+ const lag=cases.filter(c=>c.clock.handoff_lag_days>0);
+ document.getElementById('kpis').innerHTML=`<div class=kpi><b>${open.length}</b>awaiting review</div><div class=kpi><b>${p1.length}</b>P1</div><div class=kpi><b>${risk.length}</b>clock ≤3 days</div><div class=kpi><b>${lag.length}</b>late hand-offs</div>`;
+ document.getElementById('filters').innerHTML=["ALL","P1","P2","P3","FLAGGED"].map(f=>`<button class="${f==filt?'on':''}" onclick="filt='${f}';render()">${f}</button>`).join("")+`<button onclick="newForm()">+ New report</button>`;
+ let L=[...cases].sort((a,b)=>sortKey(a)-sortKey(b));
+ if(filt.startsWith("P"))L=L.filter(c=>c.triage_priority==filt);if(filt=="FLAGGED")L=L.filter(c=>c.extraction.flags.length);
+ document.getElementById('rows').innerHTML=L.map(c=>{const d=c.clock.days_left;
+  return `<div class="row ${sel==c.case_id?'sel':''}" onclick="show('${c.case_id}')"><div class="pr ${c.triage_priority}">${c.triage_priority}</div>
+  <div><b>${c.case_id}</b> · ${esc(c.extraction.suspect_product||'Unknown')}<br><small>${esc(c.channel)} · ${esc((c.extraction.events[0]||'event unclear'))}</small></div>
+  <div class=due>${d==null?'<small>periodic</small>':`<span class="${d<=3?'late':''}">${d<0?'OVERDUE '+(-d)+'d':d+'d left'}</span>`}<br><small>${esc(c.status.split(' ')[0])}</small></div></div>`}).join("");
+}
+function show(id){sel=id;render();const c=cases.find(x=>x.case_id==id),e=c.extraction,k=c.clock;
+ const ev=Object.entries(e.evidence).map(([a,b])=>`<span class=chip title="source quote">${esc(a)}: “${esc(b)}”</span>`).join("");
+ document.getElementById('detail').innerHTML=`
+ <div class=banner>AI output is a <b>draft proposal</b>. Causality, final seriousness and submission are human decisions. Every action is written to a hash-chained audit log.</div>
+ <h2 style="margin:0 0 10px">${c.case_id} <span class="pr ${c.triage_priority}" style="padding:2px 8px">${c.triage_priority}</span> <small style="color:var(--mut);font-weight:400">${esc(c.status)}</small></h2>
+ <div class=grid>
+ <div class=card><h3>Source (PII masked)</h3><div class=src>${esc(c.source_text_masked)}</div><p><small>Channel: ${esc(c.channel)} · Engine: ${esc(c.engine)}</small></p></div>
+ <div class=card><h3>Regulatory clock (deterministic)</h3><div class=clock>${k.due_date?(k.days_left<0?'Overdue '+(-k.days_left)+' d':k.days_left+' days left'):'No expedited clock'}</div>
+  <table><tr><td>Day 0 (first company awareness)</td><td>${k.day0}</td></tr><tr><td>Due date</td><td>${k.due_date||'– (periodic)'}</td></tr>
+  <tr><td>Hand-off lag to PV</td><td>${k.handoff_lag_days??0} days</td></tr><tr><td>Market / rule</td><td>${esc(k.market)} · ${esc(k.authority)}<br><small>${esc(k.rule)}</small></td></tr></table></div>
+ <div class=card><h3>Structured case <span class=ai>AI-proposed</span></h3><table>
+  <tr><td>Valid ICSR (4 criteria)</td><td><b>${esc(c.valid_icsr)}</b> ${c.missing_minimum_criteria.map(m=>`<span class="chip w">${esc(m)}</span>`).join("")}</td></tr>
+  <tr><td>Patient</td><td>${esc(JSON.stringify(e.patient)=="{}"?"Not reported":Object.values(e.patient).join(", "))}</td></tr>
+  <tr><td>Suspect product</td><td>${esc(e.suspect_product||"Not reported")} ${esc(e.dose||"")} ${esc(e.frequency||"")}</td></tr>
+  <tr><td>Event(s)</td><td>${esc(e.events.join(", ")||"Not described")}</td></tr>
+  <tr><td>Reporter verbatim</td><td>${esc(e.verbatim.join(" | ")||"–")}</td></tr>
+  <tr><td>Seriousness indicator</td><td>${esc(c.seriousness_indicator)}</td></tr>
+  <tr><td>Expectedness vs RSI</td><td>${esc(c.expectedness_suggestion)}</td></tr>
+  <tr><td>Causality</td><td>${esc(c.causality)}</td></tr></table><div style="margin-top:6px">${ev}</div></div>
+ <div class=card><h3>Flags & follow-up</h3>${e.flags.map(f=>`<span class="chip w">${esc(f)}</span>`).join("")||'<small>No flags</small>'}
+  ${c.duplicates.length?`<p><b>Possible duplicate of:</b> ${c.duplicates.map(d=>`<a href="#" onclick="show('${d.case_id}');return false">${d.case_id}</a> (${d.matched_on.join(", ")})`).join("; ")}</p>`:""}
+  <ul>${c.follow_up.map(q=>`<li>${esc(q)}</li>`).join("")}</ul></div>
+ <div class=card style="grid-column:1/3"><h3>Narrative draft <span class=ai>AI-drafted</span></h3><p>${esc(c.narrative_draft)}</p>
+  <div class=btns><button class=pri onclick="decide('accept')">Accept draft</button><button onclick="decide('escalate')">Escalate to safety physician</button><button onclick="decide('followup')">Request follow-up</button><button onclick="decide('reject')">Reject – process manually</button><button onclick="showAudit()">View audit trail</button></div></div>
+ </div>`}
+async function decide(a){if(STATIC){const c=cases.find(x=>x.case_id==sel);c.status={accept:'Accepted by PV processor',escalate:'Escalated to safety physician',followup:'Follow-up requested',reject:'AI draft rejected – manual processing'}[a];LOCAL_AUDIT.push({case_id:sel,ts:new Date().toISOString(),actor:'reviewer (demo)',action:'HUMAN_'+a.toUpperCase(),detail:{},hash:'demo-only-not-chained'});render();show(sel);return}
+ await fetch('/api/decision',{method:'POST',body:JSON.stringify({case_id:sel,action:a})});cases=[];await load();show(sel)}
+async function showAudit(){const d=STATIC?{chain_valid:'n/a in static demo (run locally for the hash chain)',entries:LOCAL_AUDIT}:await (await fetch('/api/audit')).json();
+ document.getElementById('detail').insertAdjacentHTML('beforeend',`<div class=card style="margin-top:14px"><h3>Audit trail – chain valid: ${d.chain_valid}</h3><table>${d.entries.filter(x=>x.case_id==sel).map(x=>`<tr><td>${x.ts.slice(0,19)} · ${esc(x.actor)}</td><td>${esc(x.action)} ${esc(JSON.stringify(x.detail))}<br><small>hash ${x.hash.slice(0,16)}…</small></td></tr>`).join("")}</table></div>`)}
+function newForm(){sel=null;render();document.getElementById('detail').innerHTML=`<div class=card><h3>Process a new report</h3>
+ <textarea id=t>Rep visit note: Met Dr Iyer on 22-Oct. His 66-year-old patient on Vascorin 5 mg OD developed swelling of the face and was admitted to City Hospital overnight.</textarea>
+ <p>Channel <select id=ch>${["Doctor email","Call centre","Field-sales note","Hospital email","Pharmacy report","Distributor email","Literature scan"].map(x=>`<option>${x}</option>`).join("")}</select>
+ Awareness date <input id=aw type=date value="2026-10-22"> PV receipt <input id=rc type=date value="2026-10-24">
+ Market <select id=mk><option>IN</option><option>KE</option><option>ZA</option></select> <label><input type=checkbox id=llm> Use LLM (needs API key)</label></p>
+ <div class=btns><button class=pri onclick="proc()">Run intake agent</button></div></div>`}
+async function proc(){if(STATIC){alert('Live processing needs the Python app. Run it locally (see README), or browse the 60 pre-computed cases on the left.');return}
+ const r=await (await fetch('/api/process',{method:'POST',body:JSON.stringify({text:t.value,channel:ch.value,awareness_date:aw.value,receipt_date:rc.value,market:mk.value,use_llm:llm.checked})})).json();cases=[];await load();show(r.case_id)}
+load();
+</script></body></html>

@@ -1,0 +1,61 @@
+Case_ID,engine,priority,valid,expectedness,due,flags,events,pass
+PV-001,solara-intake-poc 0.2 (rules),P3,Yes,Unlisted,,,rash,PASS
+PV-002,solara-intake-poc 0.2 (rules),P3,Yes,Listed,,,nausea,PASS
+PV-003,solara-intake-poc 0.2 (rules),P3,Yes,Listed,,,dizziness,PASS
+PV-004,solara-intake-poc 0.2 (rules),P3,Yes,Listed,,Late hand-off: 4 days between awareness and PV receipt,itching,PASS
+PV-005,solara-intake-poc 0.2 (rules),P3,Yes,Listed,,,headache,PASS
+PV-006,solara-intake-poc 0.2 (rules),P3,Yes,Listed,,,abdominal discomfort,PASS
+PV-007,solara-intake-poc 0.2 (rules),P3,Yes,Unlisted,,,vomiting,PASS
+PV-008,solara-intake-poc 0.2 (rules),P3,Yes,Listed,,Late hand-off: 2 days between awareness and PV receipt,ankle swelling,PASS
+PV-009,solara-intake-poc 0.2 (rules),P3,Yes,Listed,,,dry cough,PASS
+PV-010,solara-intake-poc 0.2 (rules),P3,Yes,Listed,,,fatigue,PASS
+PV-011,solara-intake-poc 0.2 (rules),P3,Pending follow-up,Needs review,,Ambiguous verbatim – needs clarification,dizziness,PASS
+PV-012,solara-intake-poc 0.2 (rules),P3,Yes,Listed,,,stomach upset,FAIL: validity
+PV-013,solara-intake-poc 0.2 (rules),P3,Pending follow-up,Needs review,,Ambiguous verbatim – needs clarification; Late hand-off: 4 days between awareness and PV receipt,fatigue,PASS
+PV-014,solara-intake-poc 0.2 (rules),P2,Pending follow-up,Unlisted,2026-10-29,,difficulty breathing,FAIL: expectedness
+PV-015,solara-intake-poc 0.2 (rules),P3,Pending follow-up,Unlisted,,,palpitations,PASS
+PV-016,solara-intake-poc 0.2 (rules),P3,Yes,Needs review,,Ambiguous verbatim – needs clarification,,PASS
+PV-017,solara-intake-poc 0.2 (rules),P3,Yes,Needs review,,Ambiguous verbatim – needs clarification,,FAIL: validity
+PV-018,solara-intake-poc 0.2 (rules),P3,Yes,Needs review,,Ambiguous verbatim – needs clarification,,FAIL: validity
+PV-019,solara-intake-poc 0.2 (rules),P3,Pending follow-up,Listed,,,rash,PASS
+PV-020,solara-intake-poc 0.2 (rules),P3,No – suspect product missing,Not applicable,,Late hand-off: 2 days between awareness and PV receipt,dizziness,PASS
+PV-021,solara-intake-poc 0.2 (rules),P1,No – event missing,Not applicable,2026-11-05,,,FAIL: triage_exact
+PV-022,solara-intake-poc 0.2 (rules),P2,Yes,Needs review,2026-11-06,Ambiguous verbatim – needs clarification; Paediatric,,PASS
+PV-023,solara-intake-poc 0.2 (rules),P3,Pending follow-up,Needs review,,Ambiguous verbatim – needs clarification,,"FAIL: validity,expectedness"
+PV-024,solara-intake-poc 0.2 (rules),P3,No – suspect product missing,Not applicable,,,vomiting,PASS
+PV-025,solara-intake-poc 0.2 (rules),P3,Pending follow-up,Needs review,,Ambiguous verbatim – needs clarification; Late hand-off: 4 days between awareness and PV receipt,,"FAIL: validity,expectedness"
+PV-026,solara-intake-poc 0.2 (rules),P1,Yes,Unlisted,2026-11-10,,chest pain,PASS
+PV-027,solara-intake-poc 0.2 (rules),P1,Pending follow-up,Unlisted,2026-11-11,Possible duplicate – human decision,difficulty breathing,PASS
+PV-028,solara-intake-poc 0.2 (rules),P1,Yes,Unlisted,2026-11-12,,loss of consciousness,PASS
+PV-029,solara-intake-poc 0.2 (rules),P1,Yes,Unlisted,2026-10-16,,death,FAIL: validity
+PV-030,solara-intake-poc 0.2 (rules),P1,Pending follow-up,Unlisted,2026-10-17,,facial swelling,PASS
+PV-031,solara-intake-poc 0.2 (rules),P3,No – suspect product missing,Not applicable,,Contradiction: chronology,rash,FAIL: product
+PV-032,solara-intake-poc 0.2 (rules),P3,No – suspect product missing,Not applicable,,Contradiction: age 40 vs 64,,FAIL: product
+PV-033,solara-intake-poc 0.2 (rules),P3,No – event missing,Not applicable,,Contradiction: treatment status,,PASS
+PV-034,solara-intake-poc 0.2 (rules),P3,Pending follow-up,Listed,,Contradiction: chronology; Possible duplicate – human decision,nausea,PASS
+PV-035,solara-intake-poc 0.2 (rules),P3,No – event missing,Not applicable,,Contradiction: strength 5mg vs 10mg; Late hand-off: 2 days between awareness and PV receipt,,PASS
+PV-036,solara-intake-poc 0.2 (rules),P3,Pending follow-up,Listed,,Follow-up,itching,PASS
+PV-037,solara-intake-poc 0.2 (rules),P2,Pending follow-up,Listed,2026-10-24,Follow-up,dizziness,PASS
+PV-038,solara-intake-poc 0.2 (rules),P3,Yes,Listed,,,nausea,PASS
+PV-039,solara-intake-poc 0.2 (rules),P3,Pending follow-up,Not applicable,,Follow-up,,FAIL: expectedness
+PV-040,solara-intake-poc 0.2 (rules),P3,Yes,Unlisted,,Follow-up,rash,PASS
+PV-041,solara-intake-poc 0.2 (rules),P1,Yes,Unlisted,2026-10-28,,dizziness,PASS
+PV-042,solara-intake-poc 0.2 (rules),P1,Yes,Unlisted,2026-10-29,Late hand-off: 6 days between awareness and PV receipt,muscle pain,PASS
+PV-043,solara-intake-poc 0.2 (rules),P1,Yes,Unlisted,2026-10-30,Literature,angioedema,PASS
+PV-044,solara-intake-poc 0.2 (rules),P3,No – not an adverse event,Not applicable,,Quality complaint – no AE,,PASS
+PV-045,solara-intake-poc 0.2 (rules),P2,Yes,Needs review,,Lack of efficacy,lack of efficacy,PASS
+PV-046,solara-intake-poc 0.2 (rules),P2,Yes,Not applicable,,Pregnancy,,PASS
+PV-047,solara-intake-poc 0.2 (rules),P1,Yes,Listed,2026-11-03,Overdose; Paediatric,drowsiness,PASS
+PV-048,solara-intake-poc 0.2 (rules),P2,Yes,Not applicable,,Contradiction: strength 1g vs 500mg; Medication error,,PASS
+PV-049,solara-intake-poc 0.2 (rules),P1,Yes,Unlisted,2026-11-05,Prompt-injection attempt ignored,seizure,PASS
+PV-050,solara-intake-poc 0.2 (rules),P3,Yes,Unlisted,,"PII masked: AADHAAR, EMAIL, PHONE",rash,PASS
+PV-051,solara-intake-poc 0.2 (rules),P2,Yes,Unlisted,,Off-label; Paediatric,hives,PASS
+PV-052,solara-intake-poc 0.2 (rules),P1,Yes,Unlisted,2026-10-21,,"death, myocardial infarction",PASS
+PV-053,solara-intake-poc 0.2 (rules),P3,No – non-company product,Not applicable,,Non-company product; Late hand-off: 2 days between awareness and PV receipt,vomiting,PASS
+PV-054,solara-intake-poc 0.2 (rules),P1,Yes,Unlisted,2026-11-10,,"difficulty breathing, hypotension, hives",PASS
+PV-055,solara-intake-poc 0.2 (rules),P3,Yes,Listed,,,skin dryness,PASS
+PV-056,solara-intake-poc 0.2 (rules),P1,Yes,Unlisted,2026-11-12,,stevens-johnson syndrome,PASS
+PV-057,solara-intake-poc 0.2 (rules),P3,No – reporter not identifiable,Listed,,,headache,PASS
+PV-058,solara-intake-poc 0.2 (rules),P1,Yes,Unlisted,2026-10-13,Late hand-off: 4 days between awareness and PV receipt; Possible duplicate – human decision,chest pain,PASS
+PV-059,solara-intake-poc 0.2 (rules),P1,Yes,Unlisted,2026-10-16,Late hand-off: 2 days between awareness and PV receipt,"jaundice, raised liver enzymes",PASS
+PV-060,solara-intake-poc 0.2 (rules),P1,Yes,Unlisted,2026-10-19,Follow-up,difficulty breathing,PASS

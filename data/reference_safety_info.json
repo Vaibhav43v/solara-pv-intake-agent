@@ -1,0 +1,15 @@
+{
+  "_note": "FICTIONAL Reference Safety Information (RSI) for PoC only. Real RSI comes from Solara's approved prescribing information per market.",
+  "products": {
+    "Cardiomax":  {"listed": ["headache", "dizziness", "ankle swelling", "fatigue", "nausea"], "therapy_area": "Cardiology"},
+    "Glycora":    {"listed": ["nausea", "diarrhoea", "stomach upset", "abdominal discomfort", "vomiting", "metallic taste"], "therapy_area": "Diabetes"},
+    "Pulmora":    {"listed": ["dizziness", "headache", "dry mouth"], "therapy_area": "Respiratory"},
+    "Dermava":    {"listed": ["itching", "rash", "skin dryness"], "therapy_area": "Dermatology"},
+    "Arthrexia":  {"listed": ["headache", "nausea", "abdominal discomfort"], "therapy_area": "Pain management"},
+    "Nephra":     {"listed": ["abdominal discomfort", "nausea"], "therapy_area": "Nephrology"},
+    "Vascorin":   {"listed": ["ankle swelling", "headache", "flushing"], "therapy_area": "Cardiology"},
+    "Respira":    {"listed": ["dry cough", "sore throat"], "therapy_area": "Respiratory"},
+    "Metabex":    {"listed": ["fatigue", "nausea", "diarrhoea"], "therapy_area": "Diabetes"},
+    "Neurova":    {"listed": ["drowsiness", "dizziness"], "therapy_area": "Neurology"}
+  }
+}

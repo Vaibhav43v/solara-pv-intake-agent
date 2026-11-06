@@ -1,0 +1,10 @@
+{
+  "_note": "ILLUSTRATIVE expedited-reporting rules. Must be verified and owned by Solara Regulatory Affairs before any real use. The agent never calculates deadlines with an LLM.",
+  "default_market": "IN",
+  "markets": {
+    "IN": {"authority": "CDSCO / PvPI", "serious_expedited_days": 15, "clock_basis": "calendar days from first awareness by any company employee"},
+    "KE": {"authority": "PPB Kenya", "serious_expedited_days": 15, "clock_basis": "calendar days from first awareness (illustrative)"},
+    "ZA": {"authority": "SAHPRA", "serious_expedited_days": 15, "clock_basis": "calendar days from first awareness (illustrative)"}
+  },
+  "internal_targets": {"P1_triage_hours": 4, "P2_triage_hours": 24, "P3_triage_hours": 72}
+}

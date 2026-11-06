@@ -1,0 +1,9 @@
+{
+  "triage_exact": "59/60 (98%)",
+  "no_under_triage": "60/60 (100%)",
+  "validity": "54/60 (90%)",
+  "product": "58/60 (97%)",
+  "expectedness": "56/60 (93%)",
+  "due_date": "60/60 (100%)",
+  "P1_recall": "16/16"
+}
